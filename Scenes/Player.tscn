@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/player.dae" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/AnimationController.gd" type="Script" id=3]
+
+[sub_resource type="SphereShape" id=1]
+
+[sub_resource type="CapsuleShape" id=7]
+radius = 0.338462
+height = 1.21394
+
+[node name="Player" index="0" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Skeleton" parent="BorisRig" index="0"]
+bones/8/bound_children = [ NodePath("BoneAttachment") ]
+
+[node name="BoneAttachment" type="BoneAttachment" parent="BorisRig/Skeleton" index="1"]
+transform = Transform( 0.593643, 1.28932e-005, -0.804728, 0.804728, -1.02972e-005, 0.593643, -7.77689e-007, -1, -1.65999e-005, 2.67345, 4.0913, 0.00669048 )
+bone_name = "Hand_L"
+
+[node name="Weapon" type="Area" parent="BorisRig/Skeleton/BoneAttachment" index="0"]
+
+[node name="WeaponCollisionShape" type="CollisionShape" parent="BorisRig/Skeleton/BoneAttachment/Weapon" index="0"]
+shape = SubResource( 1 )
+
+[node name="AnimationController" type="Node" parent="." index="1"]
+script = ExtResource( 3 )
+
+[node name="PlayerCollisionShape" type="CollisionShape" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, 0.935755, 0 )
+shape = SubResource( 7 )
+
+[node name="AnimationPlayer" parent="." index="3"]
+autoplay = "Idle-loop"
+[connection signal="play_animation_looping" from="." to="AnimationController" method="_on_Player_play_animation_looping"]
+[connection signal="play_animation_oneshot" from="." to="AnimationController" method="_on_Player_play_animation_oneshot"]
+[connection signal="body_entered" from="BorisRig/Skeleton/BoneAttachment/Weapon" to="." method="_on_Weapon_body_entered"]
+[connection signal="oneshot_done" from="AnimationController" to="." method="_on_AnimationController_oneshot_done"]
+[connection signal="animation_finished" from="AnimationPlayer" to="AnimationController" method="_on_AnimationPlayer_animation_finished"]
