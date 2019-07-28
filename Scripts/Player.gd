@@ -1,5 +1,6 @@
 extends KinematicBody
 
+
 signal enemy_hit(body)
 signal play_animation_looping(anim_name)
 signal play_animation_oneshot(anim_name)
